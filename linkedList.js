@@ -30,4 +30,24 @@ class LinkedList {
     }
     current.next = newNode;
   }
+
+  removeItemFromTop() {
+    if (!this.head) {
+      return;
+    }
+
+    this.head = this.head.next;
+  }
+
+  removeItemFromLast() {
+    if (!this.head) {
+      return;
+    }
+
+    let current = this.head;
+    while (current.next.next) {
+      current = current.next;
+    }
+    current.next = null;
+  }
 }
