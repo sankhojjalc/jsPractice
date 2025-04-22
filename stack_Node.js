@@ -25,14 +25,13 @@ class Stack {
   }
   pop() {
     if (!this.length) return null;
-    else {
-      let firstNode = this.head;
-      let newFirstNode = firstNode.next;
-      firstNode.next = null;
-      this.head = newFirstNode;
-      this.length--;
-      return firstNode;
-    }
+
+    let firstNode = this.head;
+    let newFirstNode = firstNode.next;
+    firstNode.next = null;
+    this.head = newFirstNode;
+    this.length--;
+    return firstNode;
   }
 }
 
