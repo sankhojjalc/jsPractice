@@ -1,28 +1,36 @@
-const fetchData = async (url, method = "GET", rest) => {
-  const response = await fetch(url, { method, ...rest });
+const fetchData = async (url) => {
+  const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(response.status);
+    throw new Error("Something went wrong!!");
   }
-  const data = await response.json();
-  return data;
+  return response.json();
 };
 
-const callWithRetries = (fn, maxRetries = 3) => {
-  let count = 0;
+const fetchWrapper = (maxRetries = 3) => {
+  let count = 1;
   return async (url) => {
-    while (count < maxRetries) {
+    while (count <= maxRetries) {
       try {
-        const data = await fn(url);
-        console.log("data", data);
+        const data = await fetchData(url);
         return data;
       } catch (error) {
-        console.log("inside catch", error);
+        console.log(`API failed, Retrying ... ${count}/${maxRetries}`);
         count++;
       }
     }
   };
 };
 
-const data = callWithRetries(fetchData, 3);
-data("https://jsonplaceholder.typicode.com/posts/1");
-// data("https://jsonplaceholder.typicode.com/poss/1"); // throws error
+const result = fetchWrapper();
+
+result("https://jsonplaceholder.typicode.com/posts/1")
+  .then((res) => {
+    if (!res) {
+      console.log("API FAILED");
+    } else {
+      console.log(res);
+    }
+  })
+  .catch((e) => console.log("e---->", e));
+
+// https://jsonplaceholder.typicode.com/posts/1   ----> throws error
